@@ -688,81 +688,88 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section-padding section-animate">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-title">Contact Us</h2>
-                <p class="lead">Have questions? We'd love to hear from you</p>
-            </div>
-            <div class="row mt-5">
-                <div class="col-lg-8 mx-auto">
-                    <form id="contactForm"
-                        action="https://docs.google.com/forms/d/e/1FAIpQLSd1Rup8jHXx_2Ki9eNqWoyb3dyK0CzIizP-wvNdSzR1YHiTsA/formResponse"
-                        method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+   <!-- Contact Section -->
+<section id="contact" class="section-padding section-animate">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="lead">Have questions? We'd love to hear from you</p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-8 mx-auto">
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="firstName" class="form-label">First Name *</label>
-                                <input type="text" class="form-control" id="firstName" name="entry.192019186" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="lastName" class="form-label">Last Name *</label>
-                                <input type="text" class="form-control" id="lastName" name="entry.494220493" required>
-                            </div>
+                <form id="contactForm"
+                    action="https://docs.google.com/forms/d/e/1FAIpQLSfTMUj8jQfcEDauYTJ4fMdvN6p3mL5r_VeMZS0K6j_ue_1pIA/formResponse"
+                    method="POST" target="hidden_iframe">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">First Name *</label>
+                            <input type="text" class="form-control" id="firstName"
+                                name="entry.258249800" required>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="mobile" class="form-label">Mobile Number *</label>
-                            <input type="tel" class="form-control" id="mobile" name="entry.1840233604"
-                                pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Last Name *</label>
+                            <input type="text" class="form-control" id="lastName"
+                                name="entry.2005686132" required>
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="service" class="form-label">Service Interested In</label>
-                            <select class="form-select" id="service" name="entry.875856310">
-                                <option value="" selected>Select a service</option>
-                                <option value="Drone/Camera Sales">Drone/Camera Sales</option>
-                                <option value="Repair Services">Repair Services</option>
-                                <option value="Aerial Services">Aerial Services</option>
-                                <option value="Training & Certification">Training & Certification</option>
-                                <option value="Equipment Rental">Equipment Rental</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        <label for="mobile" class="form-label">Mobile Number *</label>
+                        <input type="tel" class="form-control" id="mobile"
+                            name="entry.1425656873" pattern="[0-9]{10}"
+                            placeholder="10-digit mobile number" required>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message *</label>
-                            <textarea class="form-control" id="message" name="entry.1120652643" rows="5"
-                                required></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label for="service" class="form-label">Service Interested In</label>
+                        <select class="form-select" id="service" name="entry.1455533573">
+                            <option value="" selected>Select a service</option>
+                            <option value="Drone/Camera Sales">Drone/Camera Sales</option>
+                            <option value="Repair Services">Repair Services</option>
+                            <option value="Aerial Services">Aerial Services</option>
+                            <option value="Training & Certification">Training & Certification</option>
+                            <option value="Equipment Rental">Equipment Rental</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea class="form-control" id="message"
+                            name="entry.1452218070" rows="5" required></textarea>
+                    </div>
 
-                    <!-- Hidden iframe prevents redirect -->
-                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-                </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+                <!-- Hidden iframe -->
+                <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            fetch(this.action, {
-                method: 'POST',
-                body: new FormData(this),
-                mode: 'no-cors'
-            }).then(() => {
-                alert('✅ Your response has been submitted successfully!');
-                this.reset();
-            }).catch((err) => {
-                console.error('Error submitting form!', err);
-                alert('❌ Something went wrong. Please try again.');
-            });
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch(this.action, {
+            method: 'POST',
+            body: new FormData(this),
+            mode: 'no-cors'
+        }).then(() => {
+            alert('✅ Your response has been submitted successfully!');
+            this.reset();
+        }).catch((err) => {
+            console.error('Error submitting form!', err);
+            alert('❌ Something went wrong. Please try again.');
         });
-    </script>
+    });
+</script>
+
 
     <!-- WhatsApp section -->
     <!-- Shop Now floating button (links to shop.html) -->
