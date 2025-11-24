@@ -317,8 +317,8 @@ body {
 
 @media (max-width: 576px) {
     .gallery-item {
-        width: 350px;
-        height: 320px;
+        width: 300px;
+        height: 280px;
     }
     
     @keyframes scrollGallery {
@@ -326,7 +326,7 @@ body {
             transform: translateX(0);
         }
         100% {
-            transform: translateX(calc(-350px * 6 - 20px * 6));
+            transform: translateX(calc(-300px * 6 - 20px * 6));
         }
     }
 }
@@ -608,8 +608,8 @@ footer {
 
 @media (max-width: 575.98px) {
     .partner-gallery-scroll img {
-        height: 400px !important;
-        max-width: 450px !important;
+        height: 280px !important;
+        max-width: 300px !important;
         margin: 0 6px !important;
         border-radius: 7px !important;
     }
@@ -646,55 +646,166 @@ footer {
 }
 
 /* Shop floating button */
-.shop-float {
-    position: fixed;
-    bottom: 96px; /* above WhatsApp which is at 20px */
-    right: 20px;
-    background-color: #fff;
-    color: #d42027;
-    border-radius: 50%;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-    z-index: 1000;
-    text-decoration: none;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-    border: 3px solid #fff;
+    .shop-float {
+        position: fixed;
+        bottom: 96px; /* above WhatsApp which is at 20px */
+        right: 20px;
+        background-color: #fff;
+        color: #d42027;
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+        z-index: 1000;
+        text-decoration: none;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        border: 3px solid #fff;
+    }
+    .shop-float:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+    }
+    .shop-float i {
+        font-size: 22px;
+    }
+    /* When shop-float is inside the navbar, show it inline and align it to the right of the Contact link */
+    .navbar .shop-float {
+        /* keep the icon in the normal document flow so it sits immediately after the Contact item */
+        position: static;
+        background: transparent;
+        color: #fff;
+        border-radius: 0;
+        width: auto;
+        height: auto;
+        padding: 0 8px;
+        margin-left: 8px; /* small gap from the Contact link */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        border: none;
+        transition: none;
+        /* slight downward nudge for pixel-perfect alignment with Contact link */
+        transform: translateY(8px);
+    }
+
+    /* Make the navbar container a positioning context so absolute children (mobile icon) align to it */
+    .navbar .container {
+        position: relative;
+    }
+    .navbar .shop-float i {
+        font-size: 18px;
+        color: #fff;
+        vertical-align: middle;
+    }
+    .navbar .nav-item .shop-float {
+        line-height: 1;
+    }
+
+    /* Mobile-specific shop icon: hide desktop nav shop icon and show mobile icon on left side */
+    @media (max-width: 991.98px) {
+        .navbar .shop-float {
+            display: none; /* hide the nav item shop icon on smaller screens */
+        }
+        .shop-float-mobile {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: transparent;
+            border: none;
+            width: 44px;
+            height: 44px;
+            position: absolute;
+            right: 16px; /* place icon on the right side of the navbar */
+            left: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            /* keep above navbar contents */
+        }
+    }
+
+    /* Extra small devices (≤576px) */
+    @media (max-width: 575.98px) {
+        .shop-float-mobile {
+            width: 40px;
+            height: 40px;
+            right: 12px;
+            left: auto;
+            font-size: 16px;
+        }
+    }
+
+    /* Make room for the right-side mobile shop icon so the toggler doesn't overlap it */
+    /* Desktop */
+    /* ============================
+    DESKTOP (≥ 970px)
+    ============================ */
+    @media (min-width: 992px) {
+
+        /* Show desktop shop icon */
+        .shop-icon-desktop {
+            display: inline-flex !important;
+            align-items: center;
+            margin-left: 14px; /* spacing after Contact */
+        }
+
+        .shop-icon-desktop i {
+            font-size: 22px;
+            color: #fff;
+        }
+
+        /* Hide mobile version */
+        /* .shop-float-mobile {
+            display: none !important;
+        } */
+    }
+
+    /* ============================
+    MOBILE (< 970px)
+    ============================ */
+    /* 720px-KIZHA shop icon more right side */
+    @media (max-width: 720px) {
+        .shop-float-mobile {
+            right: 2px !important; /* push more to the right */
+        }
+    }
+    /* MOBILE (360px – 740px) → Slight LEFT shift for navbar */
+
+@media (max-width: 740px) {
+    .navbar .container {
+        padding-right: 70px !important; /* Give space on right for shop icon */
+    }
+    .navbar {
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+    }
+
+    .navbar-brand img {
+        height: 38px !important;   /* slightly bigger logo on mobile */
+    }
+
+    .navbar-brand span {
+        font-size: 0.95rem !important;  /* text slight small */
+    }
+
+    .navbar-toggler {
+        padding: 2px 6px !important;   /* smaller toggler */
+        font-size: 0.85rem !important;
+    }
+
+    .shop-float-mobile {
+        right: 30px !important;        /* proper spacing for smaller navbar */
+        top: 50%;
+        transform: translateY(-50%);
+    }
 }
-.shop-float:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.22);
-}
-.shop-float i {
-    font-size: 22px;
-}
-/* When shop-float is inside the navbar, display it inline instead of fixed floating */
-.navbar .shop-float {
-    position: static;
-    bottom: auto;
-    right: auto;
-    background: transparent;
-    color: #fff;
-    border-radius: 0;
-    width: auto;
-    height: auto;
-    padding: 0;
-    margin-left: 12px;
-    margin-top: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-    border: none;
-    transition: none;
-}
-.navbar .shop-float i {
-    font-size: 18px;
-    color: #fff;
-}
-.navbar .nav-item .shop-float {
-    line-height: 1;
-}
+
+
+
+
+
