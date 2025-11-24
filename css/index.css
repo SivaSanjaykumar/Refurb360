@@ -815,8 +815,8 @@ footer {
 /* Slightly smaller for ≥1200px also */
 @media (min-width: 1200px) {
     .partner-gallery-scroll img {
-        height: 450px !important;
-        width: 550px !important;
+        height: 350px !important;
+        width: 650px !important;
     }
 }
 
