@@ -804,6 +804,23 @@ footer {
         transform: translateY(-50%);
     }
 }
+/* Slightly smaller partner gallery images for ≥992px */
+@media (min-width: 992px) {
+    .partner-gallery-scroll img {
+        height: 430px !important;
+        width: 530px !important;
+    }
+}
+
+/* Slightly smaller for ≥1200px also */
+@media (min-width: 1200px) {
+    .partner-gallery-scroll img {
+        height: 450px !important;
+        width: 550px !important;
+    }
+}
+
+
 
 
 
