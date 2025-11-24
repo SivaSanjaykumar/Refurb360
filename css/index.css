@@ -786,7 +786,8 @@ footer {
     }
 
     .navbar-brand img {
-        height: 38px !important;   /* slightly bigger logo on mobile */
+        height: 38px !important;
+           /* slightly bigger logo on mobile */
     }
 
     .navbar-brand span {
@@ -815,10 +816,15 @@ footer {
 /* Slightly smaller for ≥1200px also */
 @media (min-width: 1200px) {
     .partner-gallery-scroll img {
-        height: 350px !important;
-        width: 650px !important;
+        height: 300px !important;
+        width: 600px !important;
     }
 }
+/* .navbar-brand img {
+    filter: brightness(0) invert(0);
+} */
+
+
 
 
 
