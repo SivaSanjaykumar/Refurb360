@@ -790,7 +790,7 @@ footer {
     }
 
     .navbar-brand span {
-        font-size: 0.95rem !important;  /* text slight small */
+        font-size: 1.6rem !important;  /* bigger text on mobile */
     }
 
     .navbar-toggler {
