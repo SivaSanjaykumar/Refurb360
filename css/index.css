@@ -1012,6 +1012,9 @@ footer {
     font-size: 1.02rem;
     color: #2b2f3a;
     position: relative;
+}
+/* Two-column media layout only when modifier is present */
+.partner-seo.partner-seo--media {
     display: flex;
     align-items: flex-start;
     gap: 24px;
@@ -1038,18 +1041,15 @@ footer {
     justify-content: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
-.partner-seo .partner-text { flex: 1 1 60%; min-width:0; }
-.partner-seo .partner-video { flex: 0 0 320px; position: relative; }
-.partner-seo .partner-video iframe { width:100%; height:180px; border:0; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.12); }
-.partner-seo .partner-video iframe { aspect-ratio: 16 / 9; height: auto; min-height:180px; background:#000; }
-@media (max-width: 991.98px) { .partner-seo .partner-video { flex: 1 1 100%; max-width: 520px; } }
-.partner-seo .partner-video:before { content:'\f03d'; font-family:'Font Awesome 6 Free'; font-weight:900; position:absolute; top:-14px; left:10px; background:#fff; color:var(--marvel-red); width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid rgba(212,32,39,0.25); box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+.partner-seo.partner-seo--media .partner-text { flex: 1 1 60%; min-width:0; }
+.partner-seo.partner-seo--media .partner-video { flex: 0 0 420px; position: relative; }
+.partner-seo.partner-seo--media .partner-video iframe { width:100%; border:0; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.12); aspect-ratio:16/9; height:auto; min-height:220px; background:#000; }
+@media (max-width: 1199.98px) { .partner-seo.partner-seo--media .partner-video { flex: 0 0 360px; } }
+@media (max-width: 991.98px) { .partner-seo.partner-seo--media .partner-video { flex: 1 1 100%; max-width: 560px; } }
+.partner-seo.partner-seo--media .partner-video:before { content:'\f03d'; font-family:'Font Awesome 6 Free'; font-weight:900; position:absolute; top:-14px; left:10px; background:#fff; color:var(--marvel-red); width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid rgba(212,32,39,0.25); box-shadow:0 2px 6px rgba(0,0,0,0.08); }
 @media (max-width: 575.98px) {
-    .partner-seo {
-        font-size: 0.96rem;
-        padding: 14px 16px;
-        border-radius: 12px;
-        flex-direction: column;
-        gap: 14px;
-    }
+    /* Override inline max-width for better mobile fit */
+    .partner-seo { max-width: 96vw !important; margin-left:auto; margin-right:auto; font-size: 0.96rem; padding: 14px 16px; border-radius: 12px; }
+    .partner-seo.partner-seo--media { flex-direction: column; gap: 14px; }
+    .partner-seo.partner-seo--media .partner-video iframe { min-height: 240px; }
 }
