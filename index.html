@@ -43,6 +43,67 @@
 </head>
 
 <body>
+    <!-- Floating Drone SVG for GSAP flight -->
+    <svg id="droneFlyer" class="drone-flyer" viewBox="0 0 160 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+            <linearGradient id="droneBodyGrad" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#bfc5cc"/>
+                <stop offset="100%" stop-color="#5c6670"/>
+            </linearGradient>
+            <radialGradient id="propBlur" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#bbb" stop-opacity=".7"/>
+                <stop offset="100%" stop-color="#bbb" stop-opacity="0"/>
+            </radialGradient>
+        </defs>
+        <!-- Arms -->
+        <g opacity=".9">
+            <rect x="35" y="47" width="90" height="6" rx="3" fill="#7a848f"/>
+            <rect x="78" y="12" width="6" height="76" rx="3" fill="#7a848f"/>
+        </g>
+        <!-- Body -->
+        <g>
+            <rect x="55" y="38" rx="10" ry="10" width="50" height="24" fill="url(#droneBodyGrad)"/>
+            <!-- LEDs -->
+            <circle class="led led-left" cx="60" cy="61" r="2" fill="#d42027"/>
+            <circle class="led led-right" cx="100" cy="61" r="2" fill="#3a86ff"/>
+            <!-- Camera/Gimbal -->
+            <circle cx="80" cy="66" r="6" fill="#0e0f10" stroke="#3a86ff" stroke-width="1.2"/>
+        </g>
+        <!-- Rotors with blur discs (4) -->
+        <g class="rotor rotor-front-left">
+            <circle cx="40" cy="30" r="14" fill="url(#propBlur)"/>
+            <rect x="28" y="29" width="24" height="2" fill="#d7dbe0"/>
+        </g>
+        <g class="rotor rotor-front-right">
+            <circle cx="120" cy="30" r="14" fill="url(#propBlur)"/>
+            <rect x="108" y="29" width="24" height="2" fill="#d7dbe0"/>
+        </g>
+        <g class="rotor rotor-back-left">
+            <circle cx="40" cy="82" r="14" fill="url(#propBlur)"/>
+            <rect x="28" y="81" width="24" height="2" fill="#d7dbe0"/>
+        </g>
+        <g class="rotor rotor-back-right">
+            <circle cx="120" cy="82" r="14" fill="url(#propBlur)"/>
+            <rect x="108" y="81" width="24" height="2" fill="#d7dbe0"/>
+        </g>
+        <!-- Spotlight beam (animated) -->
+        <polygon class="drone-spotlight" points="80,62 70,100 90,100" fill="rgba(255,255,210,0.18)"/>
+    </svg>
+
+    <!-- Lightning overlay (SVG for bolts + flash layer) -->
+    <svg id="lightningLayer" class="lightning-layer" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+        <path id="bolt1" d="M60 0 L48 26 L64 26 L50 58 L68 34 L52 34 Z" fill="none" stroke="#e8f7ff" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)" opacity="0" />
+    </svg>
+    <div id="lightningFlash" class="lightning-flash" aria-hidden="true"></div>
         
     <!-- Coming Soon Launch Modal -->
     <div id="launchModal"
@@ -923,6 +984,144 @@
 
     <!-- Bootstrap & JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP and Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+    <script>
+        // GSAP animations: drone flight, parallax, scroll reveals, hover tilt, light sweep
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!window.gsap) return;
+            gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+            // Light sweep on section titles
+            document.querySelectorAll('.section-title').forEach((el) => el.classList.add('light-sweep'));
+            gsap.utils.toArray('.section-title').forEach((title) => {
+                ScrollTrigger.create({
+                    trigger: title,
+                    start: 'top 80%',
+                    once: true,
+                    onEnter: () => {
+                        gsap.fromTo(title, {opacity:0, y:20}, {opacity:1, y:0, duration:0.6, ease:'power2.out'});
+                        gsap.fromTo(title, { '--sweepX': -150 }, { '--sweepX': 150, duration:1.2, ease:'power2.inOut', onUpdate: function(){
+                            // move pseudo via CSS var by updating transform through style is not direct; animate :after via CSS animation fallback below
+                        }});
+                        // Fallback: animate :after by nudging background position using a child div overlay approach (quick flash effect)
+                        const sweep = document.createElement('span');
+                        sweep.style.position='absolute';
+                        sweep.style.inset='0';
+                        sweep.style.pointerEvents='none';
+                        sweep.style.background='linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0) 90%)';
+                        sweep.style.transform='skewX(-20deg) translateX(-150%)';
+                        title.appendChild(sweep);
+                        gsap.to(sweep, { x:'250%', duration:1.2, ease:'power2.inOut', onComplete: ()=> sweep.remove() });
+                    }
+                });
+            });
+
+            // Section and element reveals
+            gsap.utils.toArray('.section-animate').forEach((sec) => {
+                gsap.fromTo(sec, {opacity:0, y:40, scale:0.98}, {
+                    opacity:1, y:0, scale:1, duration:0.4, ease:'power2.out',
+                    scrollTrigger: { trigger: sec, start: 'top 80%', once: true }
+                });
+            });
+            gsap.utils.toArray('.feature-card, .testimonial-card, .faq-item, .drone-image, .partner-logo').forEach((el) => {
+                gsap.fromTo(el, {opacity:0, y:24}, {opacity:1, y:0, duration:0.35, ease:'power2.out',
+                    scrollTrigger: {trigger: el, start:'top 85%', once:true}
+                });
+            });
+
+            // Hero parallax
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                gsap.to(hero, { backgroundPositionY: '20%', ease:'none',
+                    scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+                });
+            }
+
+            // Drone flight path across the screen with subtle 3D tilt
+            const drone = document.getElementById('droneFlyer');
+            if (drone) {
+                const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.8 });
+                // fade in
+                tl.to(drone, { autoAlpha: 1, duration: 0.6, ease: 'power2.out' });
+                // flight in a gentle arc
+                tl.to(drone, {
+                    duration: 7.5,
+                    ease: 'power1.inOut',
+                    motionPath: {
+                        path: [ {x:-160, y:0}, {x: window.innerWidth*0.28, y:-40}, {x: window.innerWidth*0.6, y:18}, {x: window.innerWidth*0.82, y:-26}, {x: window.innerWidth+200, y:-8} ],
+                        autoRotate: false
+                    },
+                    onUpdate: function(){
+                        const prog = this.progress();
+                        const tilt = gsap.utils.mapRange(0,1,-10,10, Math.sin(prog*Math.PI*2));
+                        gsap.set(drone, { rotateZ: tilt, yPercent: Math.sin(prog*Math.PI*2)*2 });
+                        // spotlight pulsing
+                        gsap.set('#droneFlyer .drone-spotlight', { opacity: 0.12 + Math.abs(Math.sin(prog*Math.PI*2))*0.12 });
+                    }
+                });
+                // reset to start off-screen
+                tl.set(drone, { x: -160, clearProps: 'yPercent,rotateZ' });
+                // rotor spin
+                gsap.to('#droneFlyer .rotor rect', { rotate: 360, transformOrigin: 'center', duration: 0.4, repeat: -1, ease: 'none' });
+
+                // Pause flight when not near top third (performance)
+                ScrollTrigger.create({
+                    start: 0, end: () => window.innerHeight * 2,
+                    onEnter: () => tl.play(), onLeave: () => tl.pause(), onEnterBack: () => tl.play(), onLeaveBack: () => tl.pause()
+                });
+            }
+
+            // Lightning effects (occasional flashes and a bolt)
+            const lightningFlash = document.getElementById('lightningFlash');
+            const lightningLayer = document.getElementById('lightningLayer');
+            const bolt = document.getElementById('bolt1');
+            if (lightningFlash && lightningLayer && bolt) {
+                const flash = () => {
+                    const tlf = gsap.timeline();
+                    tlf.set(lightningLayer, { autoAlpha: 1 });
+                    tlf.to(lightningFlash, { opacity: 0.9, duration: 0.08, ease: 'power2.in' })
+                        .to(lightningFlash, { opacity: 0.0, duration: 0.2, ease: 'power2.out' })
+                        .to(lightningFlash, { opacity: 0.5, duration: 0.05, ease: 'power2.in' })
+                        .to(lightningFlash, { opacity: 0.0, duration: 0.25, ease: 'power2.out' });
+                    // bolt draw
+                    const length = 220;
+                    bolt.style.strokeDasharray = length;
+                    bolt.style.strokeDashoffset = length;
+                    tlf.set(bolt, { opacity: 1 });
+                    tlf.to(bolt, { strokeDashoffset: 0, duration: 0.18, ease: 'power2.out' })
+                        .to(bolt, { opacity: 0, duration: 0.25, ease: 'power2.inOut' }, '>-0.05');
+                    // fade layer
+                    tlf.to(lightningLayer, { autoAlpha: 0, duration: 0.4 }, '>-0.15');
+                };
+                // randomize flashes every 8–18 seconds while near top area
+                const scheduleFlash = () => setTimeout(() => { flash(); scheduleFlash(); }, gsap.utils.random(8000, 18000));
+                scheduleFlash();
+            }
+
+            // 3D-like hover tilt on cards (desktop only)
+            if (window.matchMedia('(pointer:fine)').matches) {
+                const tiltTargets = document.querySelectorAll('.feature-card, .partner-seo');
+                tiltTargets.forEach((card) => {
+                    let ctx = gsap.context(() => {
+                        const bounds = card.getBoundingClientRect();
+                        function handleMove(e){
+                            const r = card.getBoundingClientRect();
+                            const cx = e.clientX - r.left; const cy = e.clientY - r.top;
+                            const rx = ((cy / r.height) - 0.5) * -8; // tilt X
+                            const ry = ((cx / r.width) - 0.5) * 8;   // tilt Y
+                            gsap.to(card, { rotateX: rx, rotateY: ry, transformPerspective: 800, transformStyle: 'preserve-3d', duration: 0.2 });
+                        }
+                        function reset(){ gsap.to(card, { rotateX:0, rotateY:0, duration:0.3, ease:'power2.out' }); }
+                        card.addEventListener('mousemove', handleMove);
+                        card.addEventListener('mouseleave', reset);
+                    }, card);
+                });
+            }
+        });
+    </script>
     <script>
         // Navbar scroll effect
 
